@@ -34,8 +34,8 @@ import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationContext;
 import io.spring.initializr.generator.project.ProjectGenerator;
 import io.spring.initializr.generator.project.ResolvedProjectDescription;
-import io.spring.initializr.generator.spike.build.InitializrMetadataBuildItemResolver;
 import io.spring.initializr.generator.spring.build.BuildCustomizer;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemResolver;
 import io.spring.initializr.generator.spring.build.gradle.GradleBuildProjectContributor;
 import io.spring.initializr.generator.spring.build.maven.MavenBuildProjectContributor;
 import io.spring.initializr.metadata.InitializrMetadata;
@@ -113,7 +113,7 @@ public class ProjectGeneratorInvoker {
 				.getBean(InitializrMetadataProvider.class).get();
 		context.registerBean(InitializrMetadata.class, () -> metadata);
 		context.registerBean(BuildItemResolver.class,
-				() -> new InitializrMetadataBuildItemResolver(metadata));
+				() -> new MetadataBuildItemResolver(metadata));
 		context.registerBean("temporaryBuildCustomizer", BuildCustomizer.class,
 				() -> buildCustomizer(request));
 		this.projectGenerationContext.accept(context);

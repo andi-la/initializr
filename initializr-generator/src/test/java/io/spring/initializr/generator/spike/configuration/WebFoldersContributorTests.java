@@ -22,7 +22,7 @@ import java.util.Collections;
 
 import io.spring.initializr.generator.buildsystem.Build;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
-import io.spring.initializr.generator.spike.build.InitializrMetadataBuildItemResolver;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemResolver;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrMetadata;
 import io.spring.initializr.test.metadata.InitializrMetadataTestBuilder;
@@ -80,7 +80,7 @@ public class WebFoldersContributorTests {
 	}
 
 	private Build createBuild(InitializrMetadata metadata) {
-		return new MavenBuild(new InitializrMetadataBuildItemResolver(metadata));
+		return new MavenBuild(new MetadataBuildItemResolver(metadata));
 	}
 
 	private Path contribute(Build build, InitializrMetadata metadata) throws IOException {

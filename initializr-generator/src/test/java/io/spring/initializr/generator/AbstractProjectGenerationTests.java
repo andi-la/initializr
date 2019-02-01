@@ -28,7 +28,7 @@ import io.spring.initializr.generator.io.SimpleIndentStrategy;
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationContext;
-import io.spring.initializr.generator.spike.build.InitializrMetadataBuildItemResolver;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemResolver;
 import io.spring.initializr.generator.test.project.ProjectGeneratorTester;
 import io.spring.initializr.generator.test.project.ProjectStructure;
 import io.spring.initializr.generator.version.Version;
@@ -88,7 +88,7 @@ public abstract class AbstractProjectGenerationTests {
 			ProjectGenerationContext context) {
 		context.registerBean(InitializrMetadata.class, () -> metadata);
 		context.registerBean(BuildItemResolver.class,
-				() -> new InitializrMetadataBuildItemResolver(metadata));
+				() -> new MetadataBuildItemResolver(metadata));
 		context.registerBean(IndentingWriterFactory.class,
 				() -> IndentingWriterFactory.create(new SimpleIndentStrategy("\t")));
 	}
