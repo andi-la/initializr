@@ -28,8 +28,7 @@ import io.spring.initializr.metadata.InitializrMetadata;
 import io.spring.initializr.test.metadata.InitializrMetadataTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.support.io.TempDirectory;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,13 +37,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Stephane Nicoll
  */
-@ExtendWith(TempDirectory.class)
 public class WebFoldersContributorTests {
 
 	private Path projectDir;
 
 	@BeforeEach
-	void setup(@TempDirectory.TempDir Path path) {
+	void setup(@TempDir Path path) {
 		this.projectDir = path;
 	}
 

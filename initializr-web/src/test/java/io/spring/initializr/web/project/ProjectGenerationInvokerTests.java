@@ -37,8 +37,7 @@ import io.spring.initializr.test.metadata.InitializrMetadataTestBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.support.io.TempDirectory;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentMatcher;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -59,7 +58,6 @@ import static org.mockito.Mockito.verify;
  *
  * @author Madhura Bhave
  */
-@ExtendWith(TempDirectory.class)
 public class ProjectGenerationInvokerTests {
 
 	private static final InitializrMetadata metadata = InitializrMetadataTestBuilder
@@ -138,7 +136,7 @@ public class ProjectGenerationInvokerTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	void createDistributionDirectory(@TempDirectory.TempDir Path tempDir) {
+	void createDistributionDirectory(@TempDir Path tempDir) {
 		ProjectRequest request = new ProjectRequest();
 		request.initialize(metadata);
 		request.setType("gradle-project");

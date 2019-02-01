@@ -37,15 +37,13 @@ import io.spring.initializr.metadata.InitializrMetadata;
 import io.spring.initializr.test.generator.ProjectAssert;
 import io.spring.initializr.test.metadata.InitializrMetadataTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.support.io.TempDirectory;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Abstract base class for testing project generation.
  *
  * @author Madhura Bhave
  */
-@ExtendWith(TempDirectory.class)
 public abstract class AbstractProjectGenerationTests {
 
 	private Path tempDir;
@@ -54,7 +52,7 @@ public abstract class AbstractProjectGenerationTests {
 			"org.springframework.boot", "spring-boot-starter-web");
 
 	@BeforeEach
-	void setup(@TempDirectory.TempDir Path dir) {
+	void setup(@TempDir Path dir) {
 		this.tempDir = dir;
 	}
 

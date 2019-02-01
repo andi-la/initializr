@@ -34,8 +34,7 @@ import io.spring.initializr.test.generator.PomAssert;
 import io.spring.initializr.test.generator.ProjectAssert;
 import io.spring.initializr.test.metadata.InitializrMetadataTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.support.io.TempDirectory;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentMatcher;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -49,7 +48,6 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Stephane Nicoll
  */
-@ExtendWith(TempDirectory.class)
 public abstract class AbstractProjectGeneratorTests {
 
 	private final SwappableInitializrMetadataProvider initializrMetadataProvider = new SwappableInitializrMetadataProvider();
@@ -68,7 +66,7 @@ public abstract class AbstractProjectGeneratorTests {
 	}
 
 	@BeforeEach
-	public void setup(@TempDirectory.TempDir Path folder) {
+	public void setup(@TempDir Path folder) {
 		Dependency web = Dependency.withId("web");
 		web.getFacets().add("web");
 		InitializrMetadata metadata = initializeTestMetadataBuilder()
