@@ -35,6 +35,7 @@ import io.spring.initializr.generator.project.ProjectGenerationContext;
 import io.spring.initializr.generator.project.ProjectGenerator;
 import io.spring.initializr.generator.project.ResolvedProjectDescription;
 import io.spring.initializr.generator.spring.build.BuildCustomizer;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemMapper;
 import io.spring.initializr.generator.spring.build.MetadataBuildItemResolver;
 import io.spring.initializr.generator.spring.build.gradle.GradleBuildProjectContributor;
 import io.spring.initializr.generator.spring.build.maven.MavenBuildProjectContributor;
@@ -134,10 +135,10 @@ public class ProjectGeneratorInvoker {
 		description.setPackageName(request.getPackageName());
 		description.setPackaging(Packaging.forId(request.getPackaging()));
 		description.setPlatformVersion(
-				ConceptTranslator.toVersion(request.getBootVersion()));
+				MetadataBuildItemMapper.toVersion(request.getBootVersion()));
 		request.getResolvedDependencies()
 				.forEach((dependency) -> description.addDependency(dependency.getId(),
-						ConceptTranslator.toDependency(dependency)));
+						MetadataBuildItemMapper.toDependency(dependency)));
 		return description;
 	}
 
@@ -145,9 +146,8 @@ public class ProjectGeneratorInvoker {
 		return (build) -> {
 			request.getBuildProperties().getVersions()
 					.forEach((versionProperty, valueSupplier) -> {
-						build.addVersionProperty(
-								ConceptTranslator.toVersionProperty(versionProperty),
-								valueSupplier.get());
+						build.addVersionProperty(MetadataBuildItemMapper
+								.toVersionProperty(versionProperty), valueSupplier.get());
 					});
 			if (build instanceof MavenBuild) {
 				request.getBuildProperties().getMaven()

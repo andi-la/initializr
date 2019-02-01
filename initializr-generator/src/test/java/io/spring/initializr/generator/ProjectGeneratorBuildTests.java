@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
-import io.spring.initializr.generator.spike.ConceptTranslator;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemMapper;
 import io.spring.initializr.generator.version.Version;
 import io.spring.initializr.metadata.BillOfMaterials;
 import io.spring.initializr.metadata.Dependency;
@@ -92,7 +92,8 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 			String fileName) {
 		ProjectAssert project = generateProject(language, build, "2.1.1.RELEASE",
 				(description) -> {
-					description.addDependency("web", ConceptTranslator.toDependency(WEB));
+					description.addDependency("web",
+							MetadataBuildItemMapper.toDependency(WEB));
 					description.setPackaging(Packaging.forId("war"));
 				});
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
@@ -138,7 +139,8 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 	public void versionOverride(String build, String fileName) {
 		ProjectAssert project = generateProject("kotlin", build, "2.1.1.RELEASE",
 				(description) -> {
-					description.addDependency("web", ConceptTranslator.toDependency(WEB));
+					description.addDependency("web",
+							MetadataBuildItemMapper.toDependency(WEB));
 				});
 		// FIXME
 		// request.getBuildProperties().getVersions().put(
@@ -160,7 +162,8 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 				.addDependencyGroup("foo", foo).addBom("the-bom", bom).build();
 		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
 				(description) -> {
-					description.addDependency("foo", ConceptTranslator.toDependency(foo));
+					description.addDependency("foo",
+							MetadataBuildItemMapper.toDependency(foo));
 				}, metadata);
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
 				"project/" + build + "/bom-property-" + getAssertFileName(fileName)));
@@ -178,10 +181,12 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 				.addDependencyGroup("foo", foo).build();
 		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
 				(description) -> {
-					description.addDependency("foo", ConceptTranslator.toDependency(foo));
-					description.addDependency("web", ConceptTranslator.toDependency(WEB));
+					description.addDependency("foo",
+							MetadataBuildItemMapper.toDependency(foo));
+					description.addDependency("web",
+							MetadataBuildItemMapper.toDependency(WEB));
 					description.addDependency("data-jpa",
-							ConceptTranslator.toDependency(dataJpa));
+							MetadataBuildItemMapper.toDependency(dataJpa));
 				}, metadata);
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource("project/"
 				+ build + "/compile-only-dependency-" + getAssertFileName(fileName)));
@@ -202,10 +207,11 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
 				(description) -> {
 					description.addDependency("configuration-processor",
-							ConceptTranslator.toDependency(annotationProcessor));
-					description.addDependency("web", ConceptTranslator.toDependency(WEB));
+							MetadataBuildItemMapper.toDependency(annotationProcessor));
+					description.addDependency("web",
+							MetadataBuildItemMapper.toDependency(WEB));
 					description.addDependency("data-jpa",
-							ConceptTranslator.toDependency(dataJpa));
+							MetadataBuildItemMapper.toDependency(dataJpa));
 				}, metadata);
 		project.sourceCodeAssert(fileName)
 				.equalsTo(new ClassPathResource(
@@ -232,7 +238,7 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 				.addBom("bar-bom", barBom).addBom("biz-bom", bizBom).build();
 		ProjectAssert project = generateProject(
 				"java", build, "2.1.1.RELEASE", (description) -> description
-						.addDependency("foo", ConceptTranslator.toDependency(foo)),
+						.addDependency("foo", MetadataBuildItemMapper.toDependency(foo)),
 				metadata);
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
 				"project/" + build + "/bom-ordering-" + getAssertFileName(fileName)));
@@ -254,8 +260,10 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 				.build();
 		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
 				(description) -> {
-					description.addDependency("foo", ConceptTranslator.toDependency(foo));
-					description.addDependency("bar", ConceptTranslator.toDependency(bar));
+					description.addDependency("foo",
+							MetadataBuildItemMapper.toDependency(foo));
+					description.addDependency("bar",
+							MetadataBuildItemMapper.toDependency(bar));
 				}, metadata);
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
 				"project/" + build + "/repositories-" + getAssertFileName(fileName)));
@@ -270,7 +278,8 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
 				(description) -> {
 					description.setPlatformVersion(Version.parse("2.2.0.M1"));
-					description.addDependency("foo", ConceptTranslator.toDependency(foo));
+					description.addDependency("foo",
+							MetadataBuildItemMapper.toDependency(foo));
 				}, metadata);
 		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource("project/"
 				+ build + "/repositories-milestone-" + getAssertFileName(fileName)));

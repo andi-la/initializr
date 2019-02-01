@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
-import io.spring.initializr.generator.spike.ConceptTranslator;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemMapper;
 import io.spring.initializr.generator.version.Version;
 import io.spring.initializr.test.generator.ProjectAssert;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -112,7 +112,8 @@ class ProjectGeneratorLanguageTests extends AbstractProjectGenerationTests {
 		ProjectAssert project = generateProject("java", "maven", "2.1.1.RELEASE",
 				(description) -> {
 					description.setLanguage(Language.forId(language, "1.8"));
-					description.addDependency("web", ConceptTranslator.toDependency(WEB));
+					description.addDependency("web",
+							MetadataBuildItemMapper.toDependency(WEB));
 				});
 		project.sourceCodeAssert("src/test/" + language
 				+ "/com/example/demo/DemoApplicationTests." + extension)

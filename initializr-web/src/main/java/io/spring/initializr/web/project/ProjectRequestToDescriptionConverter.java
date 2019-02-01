@@ -27,7 +27,7 @@ import io.spring.initializr.generator.buildsystem.maven.MavenBuildSystem;
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
 import io.spring.initializr.generator.project.ProjectDescription;
-import io.spring.initializr.generator.spike.ConceptTranslator;
+import io.spring.initializr.generator.spring.build.MetadataBuildItemMapper;
 import io.spring.initializr.metadata.DefaultMetadataElement;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrMetadata;
@@ -60,10 +60,11 @@ public class ProjectRequestToDescriptionConverter {
 		description.setPackageName(getPackageName(request, metadata));
 		description.setPackaging(Packaging.forId(request.getPackaging()));
 		String springBootVersion = getSpringBootVersion(request, metadata);
-		description.setPlatformVersion(ConceptTranslator.toVersion(springBootVersion));
+		description
+				.setPlatformVersion(MetadataBuildItemMapper.toVersion(springBootVersion));
 		getResolvedDependencies(request, springBootVersion, metadata)
 				.forEach((dependency) -> description.addDependency(dependency.getId(),
-						ConceptTranslator.toDependency(dependency)));
+						MetadataBuildItemMapper.toDependency(dependency)));
 		return description;
 	}
 
