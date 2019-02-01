@@ -36,6 +36,7 @@ import io.spring.initializr.generator.buildsystem.gradle.GradleBuildSystem;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
 import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationContext;
+import io.spring.initializr.generator.project.ProjectGenerationException;
 import io.spring.initializr.generator.project.ProjectGenerator;
 import io.spring.initializr.generator.project.ResolvedProjectDescription;
 import io.spring.initializr.generator.spike.ConceptTranslator;
@@ -96,13 +97,9 @@ public class ProjectGenerationInvoker {
 			publishProjectGeneratedEvent(request);
 			return file;
 		}
-		catch (IOException ex) {
+		catch (ProjectGenerationException | InitializrException ex) {
 			publishProjectFailedEvent(request, ex);
-			throw new IllegalStateException(ex); // TODO
-		}
-		catch (InitializrException ex) {
-			publishProjectFailedEvent(request, ex);
-			throw ex;
+			throw new IllegalStateException(ex);
 		}
 	}
 
@@ -127,13 +124,9 @@ public class ProjectGenerationInvoker {
 			publishProjectGeneratedEvent(request);
 			return bytes;
 		}
-		catch (IOException ex) {
+		catch (ProjectGenerationException | InitializrException ex) {
 			publishProjectFailedEvent(request, ex);
 			throw new IllegalStateException(ex); // TODO
-		}
-		catch (InitializrException ex) {
-			publishProjectFailedEvent(request, ex);
-			throw ex;
 		}
 	}
 
