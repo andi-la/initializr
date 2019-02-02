@@ -100,6 +100,19 @@ public class ProjectGenerationInvokerTests {
 	}
 
 	@Test
+	void invokeProjectStructureGenerationFailureShouldPublishFailureEvent() {
+		ProjectRequest request = new ProjectRequest();
+		request.initialize(metadata);
+		request.setType("foo-bar");
+		try {
+			this.invoker.invokeProjectStructureGeneration(request);
+		}
+		catch (Exception ex) {
+			verifyProjectFailedEventFor(request, ex);
+		}
+	}
+
+	@Test
 	void invokeBuildGenerationForMavenBuild() {
 		ProjectRequest request = new ProjectRequest();
 		request.setType("maven-project");
@@ -207,7 +220,7 @@ public class ProjectGenerationInvokerTests {
 
 		ProjectFailedEventMatcher(ProjectRequest request, Exception cause) {
 			this.request = request;
-			this.cause = cause;
+			this.cause = (Exception) cause.getCause();
 		}
 
 		@Override

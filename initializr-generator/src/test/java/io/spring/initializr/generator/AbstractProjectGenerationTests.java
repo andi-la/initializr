@@ -71,13 +71,34 @@ public abstract class AbstractProjectGenerationTests {
 
 	protected ProjectAssert generateProject(String language, String build, String version,
 			Consumer<ProjectDescription> descriptionCustomizer,
+			Consumer<ProjectGenerationContext> contextCustomizer) {
+		InitializrMetadata metadata = InitializrMetadataTestBuilder.withDefaults()
+				.addDependencyGroup("web", WEB).build();
+		return generateProject(language, build, version, descriptionCustomizer, metadata,
+				contextCustomizer);
+	}
+
+	protected ProjectAssert generateProject(String language, String build, String version,
+			Consumer<ProjectDescription> descriptionCustomizer,
 			InitializrMetadata metadata) {
+		return generateProject(language, build, version, descriptionCustomizer, metadata,
+				(projectGenerationContext) -> {
+				});
+
+	}
+
+	private ProjectAssert generateProject(String language, String build, String version,
+			Consumer<ProjectDescription> descriptionCustomizer,
+			InitializrMetadata metadata,
+			Consumer<ProjectGenerationContext> contextCustomizer) {
 		ProjectGeneratorTester projectTester = new ProjectGeneratorTester()
 				.withDirectory(this.tempDir)
 				.withDescriptionCustomizer((description) -> setupProjectDescription(
 						language, version, build, description))
-				.withDescriptionCustomizer(descriptionCustomizer).withContextInitializer(
-						(context) -> setupProjectGenerationContext(metadata, context));
+				.withDescriptionCustomizer(descriptionCustomizer)
+				.withContextInitializer(
+						(context) -> setupProjectGenerationContext(metadata, context))
+				.withContextInitializer(contextCustomizer);
 		ProjectStructure projectStructure = projectTester
 				.generate(new ProjectDescription());
 		Path resolve = projectStructure.resolve("");

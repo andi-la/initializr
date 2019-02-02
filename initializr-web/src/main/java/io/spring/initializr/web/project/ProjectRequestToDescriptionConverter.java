@@ -44,6 +44,8 @@ import org.springframework.util.StringUtils;
  */
 public class ProjectRequestToDescriptionConverter {
 
+	private static final Version VERSION_1_5_0 = Version.parse("1.5.0.RELEASE");
+
 	public ProjectDescription convert(BasicProjectRequest request,
 			InitializrMetadata metadata) {
 		validate(request, metadata);
@@ -69,10 +71,19 @@ public class ProjectRequestToDescriptionConverter {
 	}
 
 	private void validate(BasicProjectRequest request, InitializrMetadata metadata) {
+		validateSpringBootVersion(request);
 		validateType(request.getType(), metadata);
 		validateLanguage(request.getLanguage(), metadata);
 		validatePackaging(request.getPackaging(), metadata);
 		validateDependencies(request, metadata);
+	}
+
+	private void validateSpringBootVersion(BasicProjectRequest request) {
+		Version bootVersion = Version.safeParse(request.getBootVersion());
+		if (bootVersion != null && bootVersion.compareTo(VERSION_1_5_0) < 0) {
+			throw new InvalidProjectRequestException("Invalid Spring Boot version "
+					+ bootVersion + " must be 1.5.0 or higher");
+		}
 	}
 
 	private void validateType(String type, InitializrMetadata metadata) {

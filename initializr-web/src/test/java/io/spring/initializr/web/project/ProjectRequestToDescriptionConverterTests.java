@@ -49,7 +49,7 @@ public class ProjectRequestToDescriptionConverterTests {
 
 	@Test
 	public void convertWhenTypeIsInvalidShouldThrowException() {
-		BasicProjectRequest request = new BasicProjectRequest();
+		BasicProjectRequest request = getRequest();
 		request.setType("foo-build");
 		assertThatExceptionOfType(InvalidProjectRequestException.class)
 				.isThrownBy(() -> this.converter.convert(request, this.metadata))
@@ -57,8 +57,18 @@ public class ProjectRequestToDescriptionConverterTests {
 	}
 
 	@Test
+	void convertWhenSpringBootVersionInvalidShouldThrowException() {
+		BasicProjectRequest request = getRequest();
+		request.setBootVersion("1.2.3.M4");
+		assertThatExceptionOfType(InvalidProjectRequestException.class)
+				.isThrownBy(() -> this.converter.convert(request, this.metadata))
+				.withMessage(
+						"Invalid Spring Boot version 1.2.3.M4 must be 1.5.0 or higher");
+	}
+
+	@Test
 	public void convertWhenPackagingIsInvalidShouldThrowException() {
-		BasicProjectRequest request = new BasicProjectRequest();
+		BasicProjectRequest request = getRequest();
 		request.setPackaging("star");
 		assertThatExceptionOfType(InvalidProjectRequestException.class)
 				.isThrownBy(() -> this.converter.convert(request, this.metadata))
@@ -67,7 +77,7 @@ public class ProjectRequestToDescriptionConverterTests {
 
 	@Test
 	public void convertWhenLanguageIsInvalidShouldThrowException() {
-		BasicProjectRequest request = new BasicProjectRequest();
+		BasicProjectRequest request = getRequest();
 		request.setLanguage("english");
 		assertThatExceptionOfType(InvalidProjectRequestException.class)
 				.isThrownBy(() -> this.converter.convert(request, this.metadata))
@@ -76,7 +86,7 @@ public class ProjectRequestToDescriptionConverterTests {
 
 	@Test
 	void convertWhenDependencyNotPresentShouldThrowException() {
-		BasicProjectRequest request = new BasicProjectRequest();
+		BasicProjectRequest request = getRequest();
 		request.setDependencies(Collections.singletonList("invalid"));
 		assertThatExceptionOfType(InvalidProjectRequestException.class)
 				.isThrownBy(() -> this.converter.convert(request, this.metadata))
@@ -95,7 +105,7 @@ public class ProjectRequestToDescriptionConverterTests {
 	void convertShouldSetApplicationNameForProjectDescriptionUsingNameWhenAbsentFromRequest() {
 		BasicProjectRequest request = getBasicProjectRequest();
 		ProjectDescription description = this.converter.convert(request, this.metadata);
-		assertThat(description.getApplicationName()).isEqualTo("Application");
+		assertThat(description.getApplicationName()).isEqualTo("DemoApplication");
 	}
 
 	@Test
@@ -165,8 +175,14 @@ public class ProjectRequestToDescriptionConverterTests {
 		assertThat(description.getLanguage().jvmVersion()).isEqualTo("1.8");
 	}
 
-	private BasicProjectRequest getBasicProjectRequest() {
+	private BasicProjectRequest getRequest() {
 		BasicProjectRequest request = new BasicProjectRequest();
+		request.initialize(this.metadata);
+		return request;
+	}
+
+	private BasicProjectRequest getBasicProjectRequest() {
+		BasicProjectRequest request = getRequest();
 		request.setLanguage("java");
 		request.setPackaging("jar");
 		request.setType("maven-build");

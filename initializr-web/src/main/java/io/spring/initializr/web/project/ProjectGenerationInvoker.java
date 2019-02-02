@@ -85,11 +85,12 @@ public class ProjectGenerationInvoker {
 	public File invokeProjectStructureGeneration(ProjectRequest request) {
 		InitializrMetadata metadata = this.parentApplicationContext
 				.getBean(InitializrMetadataProvider.class).get();
-		ProjectDescription projectDescription = this.converter.convert(request, metadata);
-		ProjectGenerator projectGenerator = new ProjectGenerator(
-				(projectGenerationContext) -> customizeProjectGenerationContext(
-						projectGenerationContext, request, metadata));
 		try {
+			ProjectDescription projectDescription = this.converter.convert(request,
+					metadata);
+			ProjectGenerator projectGenerator = new ProjectGenerator(
+					(projectGenerationContext) -> customizeProjectGenerationContext(
+							projectGenerationContext, request, metadata));
 			Path path = projectGenerator.generate(projectDescription);
 			File file = path.toFile();
 			String name = file.getName();

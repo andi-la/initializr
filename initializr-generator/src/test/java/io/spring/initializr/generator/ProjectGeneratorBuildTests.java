@@ -20,8 +20,10 @@ import java.util.stream.Stream;
 
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
+import io.spring.initializr.generator.spring.build.BuildCustomizer;
 import io.spring.initializr.generator.spring.build.MetadataBuildItemMapper;
 import io.spring.initializr.generator.version.Version;
+import io.spring.initializr.generator.version.VersionProperty;
 import io.spring.initializr.metadata.BillOfMaterials;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrMetadata;
@@ -137,18 +139,20 @@ class ProjectGeneratorBuildTests extends AbstractProjectGenerationTests {
 	@ParameterizedTest
 	@MethodSource("parameters")
 	public void versionOverride(String build, String fileName) {
-		ProjectAssert project = generateProject("kotlin", build, "2.1.1.RELEASE",
-				(description) -> {
-					description.addDependency("web",
-							MetadataBuildItemMapper.toDependency(WEB));
-				});
-		// FIXME
-		// request.getBuildProperties().getVersions().put(
-		// VersionProperty.of("spring-foo.version", false), () -> "0.1.0.RELEASE");
-		// request.getBuildProperties().getVersions()
-		// .put(VersionProperty.of("spring-bar.version"), () -> "0.2.0.RELEASE");
-		// project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
-		// "project/" + build + "/version-override-" + getAssertFileName(fileName)));
+		ProjectAssert project = generateProject("java", build, "2.1.1.RELEASE",
+				(description) -> description.addDependency("web",
+						MetadataBuildItemMapper.toDependency(WEB)),
+				(projectGenerationContext) -> projectGenerationContext
+						.registerBean(BuildCustomizer.class, () -> (projectBuild) -> {
+							projectBuild.addVersionProperty(
+									VersionProperty.of("spring-foo.version", false),
+									"0.1.0.RELEASE");
+							projectBuild.addVersionProperty(
+									VersionProperty.of("spring-bar.version"),
+									"0.2.0.RELEASE");
+						}));
+		project.sourceCodeAssert(fileName).equalsTo(new ClassPathResource(
+				"project/" + build + "/version-override-" + getAssertFileName(fileName)));
 	}
 
 	@ParameterizedTest
