@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: initializr
+  annotations:
+    github.com/project-slug: andi-la/initializr
+spec:
+  type: other
+  lifecycle: unknown
+  owner: guests
